@@ -50,10 +50,10 @@ runs:
         INPUT_SERVER: ${{ inputs.server }}
         INPUT_TENANT: ${{ inputs.tenant }}
       run: |
-        OPTS=""
         if [ -n "$INPUT_API_TOKEN" ]; then
-          OPTS="$OPTS --token $INPUT_API_TOKEN"
+          export KESTRACTL_TOKEN="$INPUT_API_TOKEN"
         elif [ -n "$INPUT_USER" ] && [ -n "$INPUT_PASSWORD" ]; then
-          OPTS="$OPTS --username $INPUT_USER --password $INPUT_PASSWORD"
+          unset KESTRACTL_TOKEN
+          export KESTRACTL_USERNAME="$INPUT_USER" KESTRACTL_PASSWORD="$INPUT_PASSWORD"
         fi
-        ./kestractl flows validate $INPUT_DIRECTORY --host $INPUT_SERVER --tenant $INPUT_TENANT $OPTS
+        ./kestractl flows validate "$INPUT_DIRECTORY" --host "$INPUT_SERVER" --tenant "$INPUT_TENANT"
